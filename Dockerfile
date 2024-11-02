@@ -1,27 +1,26 @@
-# Étape 1 : Utiliser une image Maven pour construire le projet
-FROM maven:3.8.6-openjdk-17 AS build
-
-# Définir le répertoire de travail
+# Étape 1 : Construire l'application avec Maven
+FROM openjdk:21-jdk AS build
 WORKDIR /app
 
-# Copier les fichiers pom.xml et src pour le build
+# Copier les fichiers nécessaires pour la compilation
 COPY pom.xml .
-COPY src ./src
+COPY src src
+COPY mvnw .
+COPY .mvn .mvn
 
-# Construire l’application
-RUN mvn clean install -DskipTests
+# Donner la permission d'exécution au wrapper Maven
+RUN chmod +x ./mvnw
+RUN ./mvnw clean package -DskipTests
 
-# Étape 2 : Utiliser une image JDK pour exécuter l'application
-FROM openjdk:17-jdk-slim
-
-# Définir le répertoire de travail
+# Étape 2 : Créer l'image finale pour l'application Spring Boot
+FROM openjdk:21-jdk
 WORKDIR /app
 
-# Copier le fichier JAR construit depuis l’étape de build
+# Copier le fichier JAR généré depuis l'étape de build
 COPY --from=build /app/target/*.jar app.jar
 
-# Exposer le port 8080 (ou autre si nécessaire)
-EXPOSE 8080
+# Exécuter l'application
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
-# Démarrer l’application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Exposer le port
+EXPOSE 8080
