@@ -4,7 +4,7 @@ spring:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
   profiles:
-    active: local
+    active: prod
   jpa:
     hibernate:
       ddl-auto: create
