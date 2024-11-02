@@ -1,5 +1,5 @@
 # Étape 1 : Construire l'application avec Maven
-FROM openjdk:21-jdk AS build
+FROM openjdk:19-jdk AS build
 WORKDIR /app
 
 # Copier les fichiers nécessaires pour la compilation
@@ -13,7 +13,7 @@ RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Étape 2 : Créer l'image finale pour l'application Spring Boot
-FROM openjdk:21-jdk
+FROM openjdk:19-jdk
 WORKDIR /app
 
 # Copier le fichier JAR généré depuis l'étape de build
