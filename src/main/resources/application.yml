@@ -3,14 +3,15 @@ spring:
     password: ${DATASOURCE_PASSWORD}
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
+    driver-class-name: ${DATASOURCE_DRIVERNAME}
   profiles:
-    active: prod
+    active: local
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: ${DATASOURCE_DIALECT}
         format-sql: true
       show-sql: true
 
